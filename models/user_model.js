@@ -47,7 +47,7 @@ const userSchema = new Schema({
     {
       companyName: { type: String },
       role: { type: String },
-      responsibilty: { type: String },
+      responsibility: { type: String },
       skills: { type: String },
       location: { type: String },
       startDate: { type: String },
@@ -70,7 +70,7 @@ const userSchema = new Schema({
   achievements: [
     {
       awards: { type: String },
-      desciption: { type: String },
+      description: { type: String },
       image: { type: String },
       date: { type: String },
       nameOfInstitution: { type: String },
@@ -80,7 +80,7 @@ const userSchema = new Schema({
   projects: [
     {
       projectName: { type: String },
-      desciption: { type: String },
+      description: { type: String },
       contributors: { type: String },
       skills: { type: String },
       links: { type: String },
@@ -91,10 +91,10 @@ const userSchema = new Schema({
   volunteering: [
     {
       organization: { type: String },
-      desciption: { type: String },
+      description: { type: String },
       skills: { type: String },
       role: { type: String },
-      responsibilty: { type: String },
+      responsibility: { type: String },
       location: { type: String },
       startDate: { type: String },
       endDate: { type: String },
@@ -103,4 +103,4 @@ const userSchema = new Schema({
   ],
 });
 
-export const UserModel = ("User", userSchema);
+export const UserModel = model("User", userSchema);
