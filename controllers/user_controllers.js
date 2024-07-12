@@ -8,6 +8,7 @@ export const signup = async(req, res) => {
     if(error){
         return res.status(400).send(error.details[0].message)
     }
+    //Check if user exits
     const email = value.email
     console.log('email', email)
 
@@ -15,14 +16,16 @@ export const signup = async(req, res) => {
     if(findIfUserExist){
         return res.status(401).send('User already exists')
     }else{
-        const addUser = await UserModel.create(value)
+      const hashedPassword = await bcrypt.hash(value.password, 12)
+    value.password = hashedPassword
+    console.log('val', value)
+  //  const addUser = await UserModel.create(value)
+  //  return res.status(201).send(addUser)
+        
+   const addUser = await UserModel.create(value)
         return res.status(201).send('User created successfully')
     }
 
-    const hashedPassword = await bcrypt.hash(value.password, 12)
-    value.password = hashedPassword
-   const addUser = await UserModel.create(value)
-   return res.status(201).send(addUser)
 };
 
 export const login = async (req, res, next) => {
@@ -55,3 +58,14 @@ export const login = async (req, res, next) => {
        next(error)
       }
 }
+
+export const logout = async(req, res, next) => {
+  try {
+     //Destroy user session
+     await req.session.destroy();
+     //Return response
+     res.status(200).json('Logout succesfully')
+  } catch (error) {
+     next(error)
+  }
+  }

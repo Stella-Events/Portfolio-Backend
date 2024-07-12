@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, signup } from "../controllers/user_controllers.js";
+import { login, logout, signup } from "../controllers/user_controllers.js";
 import { checkUserSession } from "../middlewares/auth.js";
 
 
@@ -8,7 +8,7 @@ userRouter.post('/users/signup', signup);
 
 userRouter.post('/users/login', login);
 
-
+userRouter.post ('/users/logout',checkUserSession, logout);
 
 
 
