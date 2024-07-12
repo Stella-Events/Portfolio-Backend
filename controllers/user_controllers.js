@@ -69,3 +69,18 @@ export const logout = async(req, res, next) => {
      next(error)
   }
   }
+
+  export const getUser = async(req, res) => {
+
+    const userId = req.params.Id
+    //get user based on the user id
+    //use the select to exclude the password
+    //use populate to populate the education
+
+    const userDetails = await UserModel.findById(userId)
+    .select({password: false})
+    .populate('UserProfile')
+
+
+    return res.status(201).json({user: userDetails})
+  }

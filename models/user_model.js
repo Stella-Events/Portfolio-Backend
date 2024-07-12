@@ -1,5 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types} from "mongoose";
 import {toJSON} from '@reis/mongoose-to-json'
+
 const userSchema = new Schema({
   
     firstName: { type: String },
@@ -9,97 +10,14 @@ const userSchema = new Schema({
     email: { type: String, unique: true },
     termsAndConditions: { type: Boolean },
     password: { type: String },
-    
-
-
-  userProfile: {
-    profilePicture: { type: String },
-    sex: { type: String, enum: ["male", "female"] },
-    maritalStatus: {
-      type: String,
-      enum: ["single", "married", "prefer-not-to-say"],
-    },
-    address: { type: String },
-    dateOfBirth: { type: String },
-    bio: { type: String },
-    about: { type: String },
-    contact: { type: String },
-    resume: { type: String },
-    languages: [{ type: String }],
-    githubLink: { type: String },
-    linkedInLink: { type: String },
-    twitterLink: { type: String },
-  },
-
-
-  skills: [
-    {
-      name: { type: String },
-      levelOfProficiency: {
-        type: String,
-        enum: ["beginner", "intermidiate", "advanced", "expert"],
-      },
-    },
-  ],
-
-  experience: [
-    {
-      companyName: { type: String },
-      role: { type: String },
-      responsibility: { type: String },
-      skills: { type: String },
-      location: { type: String },
-      startDate: { type: String },
-      endDate: { type: String },
-    },
-  ],
-
-  education: [
-    {
-      schoolName: { type: String },
-      program: { type: String },
-      qualification: { type: String },
-      grade: { type: String },
-      location: { type: String },
-      startDate: { type: String },
-      endDate: { type: String },
-    },
-  ],
-
-  achievements: [
-    {
-      awards: { type: String },
-      description: { type: String },
-      image: { type: String },
-      date: { type: String },
-      nameOfInstitution: { type: String },
-    },
-  ],
-
-  projects: [
-    {
-      projectName: { type: String },
-      description: { type: String },
-      contributors: { type: String },
-      skills: { type: String },
-      links: { type: String },
-      nameOfInstitution: { type: String },
-    },
-  ],
-
-  volunteering: [
-    {
-      organization: { type: String },
-      description: { type: String },
-      skills: { type: String },
-      role: { type: String },
-      responsibility: { type: String },
-      location: { type: String },
-      startDate: { type: String },
-      endDate: { type: String },
-      projectName: { type: String },
-    },
-  ],
+    education: [{ type: Types.ObjectId, ref: 'Education' }],
+    skills: [{ type: Types.ObjectId, ref: 'Skill' }],
+    achievements: [{ type: Types.ObjectId, ref: 'Achievement' }],
+    projects: [{ type: Types.ObjectId, ref: 'Project' }],
+    userProfile: { type: Types.ObjectId, ref: 'UserProfile' },
+    volunteering: [{ type: Types.ObjectId, ref: 'Volunteering' }],
+    experiences: [{ type: Types.ObjectId, ref: 'Experience' }],
+ 
 });
 userSchema.plugin(toJSON)
 export const UserModel = model("User", userSchema);

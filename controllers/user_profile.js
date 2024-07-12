@@ -1,7 +1,9 @@
 import { UserProfileModel } from "../models/user_Profile.js";
 import { userProfileSchema } from "../schema/user_profile.js";
+import { UserModel } from "../models/user_model.js";
 
-export const newUserProfile = async (req, res, next) =>{
+//Post 
+export const addUserProfile = async (req, res, next) =>{
     
    try {
       //Error handling
@@ -10,14 +12,22 @@ export const newUserProfile = async (req, res, next) =>{
        return res.status(400).send(error.details[0].message)
     }
      console.log(value,'value')
+
+     //find the user
+     const user = await UserModel.findById(req.session.user.id)
+     if(!user){
+      return res.status(404).send('User not found')
+     }
      
-     //Request
-     const addUserProfile = await UserProfileModel.create({...req.body,
-      profilePicture: req.file.filename
-  });
+     //Create New Profile
+     const newProfile = await UserProfileModel.create(req.session.user.id);
+     user.userProfile = newProfile.id
+     
+     await user.save();
+
       
     //Response
-      res.status(201).json(addUser)
+      res.status(201).json({newProfile})
        
    } catch (error) {
     next(error)
