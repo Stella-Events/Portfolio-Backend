@@ -21,6 +21,37 @@ export const signup = async(req, res) => {
 
     const hashedPassword = await bcrypt.hash(value.password, 12)
     value.password = hashedPassword
-   const addUser = await UserMode.create(value)
+   const addUser = await UserModel.create(value)
    return res.status(201).send(addUser)
 };
+
+export const login = async (req, res, next) => {
+    try {
+        const {email, username, password} = req.body;
+         //Find a user using their unique identifier
+         const user = await UserModel.findOne({
+           $or:[
+             {email: email},
+             {username: username},
+           ]
+         });
+         if(!user){
+           return res.status(401).json('No user found')
+         }else{
+           
+           //Verify their password
+           const correctPassword = bcrypt.compareSync(req.body.password, user.password);//or await bcrypt.compare
+           
+           if(!correctPassword) {
+              res.status(401).json('Invalid credentials');
+           }else{
+              //Generate a session
+              req.session.user = {id: user.id}//something unique that will help locate user
+              //Return response
+              res.status(200).json('Login successful')
+           }
+         }   
+      } catch (error) {
+       next(error)
+      }
+}
