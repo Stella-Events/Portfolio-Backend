@@ -63,14 +63,19 @@ export const getAllProfile = async (req, res, next) => {
 
 }
 
-export const patchProfile = async (req, res, next) => {
+export const patchProfile = async (req, res,) => {
   //Request
-  const editUserProfile = await UserProfileModel.findByIdAndUpdate(
-    req.params.id,
-    {
-      ...req.body,
-      profilePicture: req?.file?.filename
-    }
-  )
-  res.status(200).json(editUserProfile)
+  try {
+    const editUserProfile = await UserProfileModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body,
+        profilePicture: req?.file?.filename
+      },
+      { new: true },
+    )
+    res.status(200).json(editUserProfile)
+  } catch (error) {
+    res.status(500).json({ error: error.message})
+  }
 }

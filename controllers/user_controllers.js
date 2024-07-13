@@ -86,7 +86,7 @@ export const logout = async(req, res, next) => {
 
     const userDetails = await UserModel.find({username})
     .select({password: false})
-    .populate('UserProfile')
+    .populate('userProfile')
 
 
     return res.status(201).json({user: userDetails})
