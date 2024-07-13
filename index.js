@@ -1,10 +1,12 @@
 import express from "express";
 import { dbConnection } from "./config/db.js";
+import { achievementRouter } from "./routes/achievement_routes.js";
 
 // creating express route
 const app = express();
 
 
+app.use(achievementRouter)
 
 // Call database
 dbConnection();
