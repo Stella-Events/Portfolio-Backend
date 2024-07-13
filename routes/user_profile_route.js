@@ -1,15 +1,17 @@
 import { Router } from "express";
-import { getAllProfile, getOneProfile, addUserProfile } from "../controllers/user_profile.js";
+import { getAllProfile, addUserProfile, patchProfile} from "../controllers/user_profile.js";
 import { remoteUpload } from "../middlewares/uploads.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
 //Setting up Route
 const profileRouter = Router()
 
 //Creating routes
-profileRouter.post('/users/profiles', remoteUpload.single('profilePicture'), addUserProfile)
+profileRouter.post('/users/profile', remoteUpload.single('profilePicture'), addUserProfile, checkUserSession)
 
-profileRouter.get('/users/profiles', getAllProfile)
+profileRouter.get('/users/profile', checkUserSession, getAllProfile);
 
-profileRouter.get('/users/profiles', getOneProfile)
+profileRouter.patch('/users/profile/:id', patchProfile, checkUserSession);
+
 
 export default profileRouter;

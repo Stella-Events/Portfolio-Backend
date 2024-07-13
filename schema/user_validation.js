@@ -8,14 +8,15 @@ import joi from "joi";
         password: joi.string().min(4).required(),
         confirmedPassword: joi.ref('password'),
         username: joi.string().required(),
-        termsAndConditions: joi.boolean()
+        termsAndConditions: joi.boolean(),
+        
     
-})
+}) .with('password', 'confirmedPassword')
 
 export const userProfileSchema = joi.object({
         profilePicture: joi.string(), 
-        sex: joi.string().valid('Male', 'Female').required(),
-        maritalStatus: joi.string().required(),
+        sex: joi.string().valid('Male', 'Female'), //joi enum validation error to fix 
+        maritalStatus: joi.string(),
         address: joi.string().required(),
         dateOfBirth: joi.string().required(),
         bio: joi.string(), 
@@ -26,9 +27,9 @@ export const userProfileSchema = joi.object({
         githubLink: joi.string(),
         linkedInLink: joi.string(),
         twitterLink: joi.string(),
-        
+        user: joi.string().required()
           
-    })
+    }) 
 
     export const educationSchema = joi.object({
         schoolName: joi.string().required(),
@@ -38,6 +39,7 @@ export const userProfileSchema = joi.object({
           location: joi.string().required(),
           startDate: joi.string().required(),
           endDate: joi.string(),
+          user: joi.string().required(),
     })
 
     export const achievementSchema = joi.object({
@@ -46,12 +48,13 @@ export const userProfileSchema = joi.object({
         image: joi.string(),
         date: joi.string() ,
         nameOfInstitution: joi.string(),
+        user: joi.string().required(),
     })
 
     export const  skillSchema = joi.object({
         name: joi.string(),
         levelOfProficiency: joi.string().valid('beginner', 'intermidiate', 'advanced', 'expert'),
-            
+        user: joi.string().required()  
     })
 
     export const volunteeringSchema = joi.object({
@@ -64,6 +67,7 @@ export const userProfileSchema = joi.object({
         startDate: joi.string(),
         endDate: joi.string(),
         projectName: joi.string(),
+        user: joi.string().required()
     })
 
     export const projectSchema = joi.object({
@@ -73,6 +77,7 @@ export const userProfileSchema = joi.object({
         skills: joi.string(),
         links: joi.string(),
         nameOfInstitution: joi.string(),
+        user: joi.string().required()
     })
 
     export const experienceSchema = joi.object({
@@ -83,4 +88,5 @@ export const userProfileSchema = joi.object({
         location: joi.string().required(),
         startDate: joi.string().required(),
         endDate: joi.string(),
+        user: joi.string().required()
     })

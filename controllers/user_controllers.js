@@ -2,9 +2,10 @@ import * as bcrypt from "bcrypt";
 import { UserModel } from "../models/user_model.js"
 import { userSchema } from "../schema/user_validation.js"
 
-
+//User Signup
 export const signup = async(req, res) => {
-    const {error, value} = userSchema.validate(req.body)
+    
+  const {error, value} = userSchema.validate(req.body)
     if(error){
         return res.status(400).send(error.details[0].message)
     }
@@ -23,11 +24,15 @@ export const signup = async(req, res) => {
   //  return res.status(201).send(addUser)
         
    const addUser = await UserModel.create(value)
-        return res.status(201).send('User created successfully')
-    }
 
+   req.session.user = { id: addUser.id }
+
+   return res.status(201).send('User created successfully')  
+    }
+    
 };
 
+//User login
 export const login = async (req, res, next) => {
     try {
         const {email, username, password} = req.body;
@@ -50,8 +55,10 @@ export const login = async (req, res, next) => {
            }else{
               //Generate a session
               req.session.user = {id: user.id}//something unique that will help locate user
+              
+              console.log('user', req.session.user)
               //Return response
-              res.status(200).json('Login successful')
+              res.status(201).json('Login successful')
            }
          }   
       } catch (error) {
@@ -72,12 +79,12 @@ export const logout = async(req, res, next) => {
 
   export const getUser = async(req, res) => {
 
-    const userId = req.params.Id
+    const username = req.params.username
     //get user based on the user id
     //use the select to exclude the password
     //use populate to populate the education
 
-    const userDetails = await UserModel.findById(userId)
+    const userDetails = await UserModel.find({username})
     .select({password: false})
     .populate('UserProfile')
 

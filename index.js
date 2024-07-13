@@ -27,10 +27,10 @@ store: MongoStore.create({
 
 //App use
 app.use('/api/v1', userRouter)
-app.use(profileRouter)
+app.use('/api/v1', profileRouter)
  
 // listening for incoming port
-const port = 5050
+const port = process.env.Port || 5050
 app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
