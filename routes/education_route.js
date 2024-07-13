@@ -7,5 +7,8 @@ const educationRouter = Router()
 //creating routes
 educationRouter.post('/users/education', addEducation)
 
+educationRouter.get('/users/education')
+
+educationRouter.patch('/users/education/:id')
 
 export default educationRouter
