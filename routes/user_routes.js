@@ -11,7 +11,7 @@ userRouter.post('/users/login', checkUserSession, login);
 
 userRouter.post ('/users/logout', checkUserSession, logout);
 
-userRouter.get('/users/', getUser);
+userRouter.get('/users/:username', getUser);
 
 
 
