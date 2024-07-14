@@ -6,13 +6,13 @@ import userRouter from "./routes/user_routes.js";
 import profileRouter from "./routes/user_profile_route.js";
 import educationRouter from "./routes/education_route.js";
 import { skillRouter } from "./routes/skills_routes.js";
+import { projectRouter } from "./routes/project_routes.js";
 
 // Call database
 dbConnection();
 
 // creating express route
 const app = express();
-
 
 //Applying middleware
 app.use(express.json());
@@ -33,7 +33,7 @@ app.use('/api/v1', userRouter)
 app.use('/api/v1', profileRouter)
 app.use('/api/v1', educationRouter)
 app.use(skillRouter)
-
+app.use(projectRouter)
 
 
 
