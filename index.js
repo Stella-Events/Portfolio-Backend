@@ -4,6 +4,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import userRouter from "./routes/user_routes.js";
 import profileRouter from "./routes/user_profile_route.js";
+import educationRouter from "./routes/education_route.js";
 
 // Call database
 dbConnection();
@@ -28,6 +29,8 @@ store: MongoStore.create({
 //App use
 app.use('/api/v1', userRouter)
 app.use('/api/v1', profileRouter)
+app.use('/api/v1', educationRouter)
+
  
 // listening for incoming port
 const port = process.env.Port || 5050
