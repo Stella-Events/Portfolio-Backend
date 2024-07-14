@@ -1,6 +1,6 @@
 import { VolunteeringModel } from "../models/volunteering.js";
 import { UserModel } from "../models/user_model.js";
-import {volunteeringSchema}  from "../schema/user_projects.js";
+import { volunteeringSchema } from "../schema/user_volunteering.js";
 
 
 // Creating Volunteering Portfolio
