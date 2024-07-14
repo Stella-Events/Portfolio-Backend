@@ -1,5 +1,6 @@
 import express from "express";
 import { dbConnection } from "./config/db.js";
+import { achievementRouter } from "./routes/achievement_routes.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import userRouter from "./routes/user_routes.js";
@@ -36,6 +37,7 @@ app.use('/api/v1', educationRouter)
 app.use(skillRouter)
 app.use(projectRouter)
 app.use(volunteeringRouter);
+app.use(achievementRouter)
 
 // listening for incoming port
 const port = process.env.Port || 5050
