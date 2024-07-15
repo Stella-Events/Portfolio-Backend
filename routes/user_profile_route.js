@@ -7,7 +7,10 @@ import { checkUserSession } from "../middlewares/auth.js";
 const profileRouter = Router()
 
 //Creating routes
-profileRouter.post('/users/profile', remoteUpload.single('profilePicture'), addUserProfile, checkUserSession)
+profileRouter.post('/users/profile', remoteUpload.fields([
+    { name: "profilePicture", maxCount: 1 },
+    { name: "resume", maxCount: 1 },
+  ]), addUserProfile, checkUserSession);
 
 profileRouter.get('/users/profile', checkUserSession, getAllProfile);
 
