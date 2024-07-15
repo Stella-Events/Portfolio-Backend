@@ -4,7 +4,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import expressOasGenerator from "@mickeymond/express-oas-generator";
 import mongoose from "mongoose";
-import cors from 'cors'
+import cors from 'cors';
+import { restartServer } from "./restart_server.js";
 import userRouter from "./routes/user_routes.js";
 import profileRouter from "./routes/user_profile_route.js";
 import educationRouter from "./routes/education_route.js";
@@ -15,14 +16,12 @@ import { achievementRouter } from "./routes/achievement_routes.js";
 import experienceRouter from "./routes/experience_routes.js";
 
 
-// Call database
-dbConnection();
 
 // creating express route
 const app = express();
 
 //Applying middleware
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:5173'}));
 app.use(express.json());
 
 app.use(session({
@@ -37,6 +36,10 @@ store: MongoStore.create({
 })
 )
 
+app.get("/api/v1/health", (req, res) => {
+    res.json({ status: "UP" });
+  });
+
 // Documentation
 expressOasGenerator.handleResponses(app, {
     alwaysServeDocs: true,
@@ -45,18 +48,33 @@ expressOasGenerator.handleResponses(app, {
 });
 
 //Use routers
-app.use('/api/v1', userRouter)
-app.use('/api/v1', profileRouter)
 app.use('/api/v1', educationRouter)
 app.use('/api/v1', skillRouter)
 app.use( '/api/v1', projectRouter)
 app.use( '/api/v1', volunteeringRouter);
 app.use( '/api/v1', achievementRouter)
 app.use( '/api/v1', experienceRouter);
+app.use('/api/v1', userRouter)
+app.use('/api/v1', profileRouter)
 
+expressOasGenerator.handleRequests();
+app.use((req, res) => res.redirect('/api-docs/'));
 
-// listening for incoming port
-const port = process.env.Port || 5050
-app.listen(port, () => {
-    console.log(`App listening on ${port}`)
-})
+const reboot = async () => {
+    setInterval(restartServer, process.env.INTERVAL)
+    }
+
+    const PORT = process.env.PORT || 5050;
+    dbConnection()
+    .then(() => {
+      app.listen(PORT, () => {
+          reboot().then(() => {
+          console.log(`Server Restarted`);
+        });
+        console.log(`Server is connected to Port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      process.exit(-1);
+    });

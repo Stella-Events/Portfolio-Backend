@@ -36,6 +36,7 @@ export const getAllUserProjects = async (req, res) => {
     if (allProjects.length === 0) {
       return res.status(404).send("No projects added");
     }
+
     res.status(200).json({ projects: allProjects });
   } catch (error) {
     return res.status(500).send("Server error");
@@ -62,6 +63,13 @@ export const updateUserProject = async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
+
+    const userSessionId = req.session.user.id; 
+      const user = await UserModel.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
     const updatedProject = await ProjectModel.findByIdAndUpdate(req.params.projectId, value, { new: true }); 
     if (!updatedProject) {
       return res.status(404).send("Project not found");
@@ -76,18 +84,19 @@ export const updateUserProject = async (req, res) => {
 // Delete a user project
 export const deleteUserProject = async (req, res) => {
   try {
-    const deletedProject = await ProjectModel.findByIdAndDelete(req.params.projectId);
+    
 
+    const userSessionId = req.session.user.id; 
+    const user = await UserModel.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const deletedProject = await ProjectModel.findByIdAndDelete(req.params.id);
     if (!deletedProject) {
       return res.status(404).send('Project not found');
     }
 
-    // Remove project reference from user
-    const user = await UserModel.findById(deletedProject.user);
-    if (user) {
-      user.projects = user.projects.filter(projectId => projectId.toString() !== req.params.projectId); 
-      await user.save();
-    }
 
     res.status(200).json({ project: deletedProject });
   } catch (error) {
