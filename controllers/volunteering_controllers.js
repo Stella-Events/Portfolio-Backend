@@ -19,7 +19,7 @@ export const addUserVolunteering = async (req, res) => {
     }
 
     const volunteering = await VolunteeringModel.create({ ...value, user: userSessionId });
-    user.volunteering.push(volunteering._id); 
+    user.volunteering.push(volunteering._id);
     await user.save();
 
     res.status(201).json({ volunteering });
@@ -45,7 +45,7 @@ export const getAllUserVolunteerings = async (req, res) => {
 // Get one user volunteering
 export const getOneUserVolunteering = async (req, res) => {
   try {
-    const volunteering = await VolunteeringModel.findById(req.params.volunteeringId); 
+    const volunteering = await VolunteeringModel.findById(req.params.volunteeringId);
     if (!volunteering) {
       return res.status(404).send('Volunteering not found');
     }
@@ -62,12 +62,19 @@ export const updateUserVolunteering = async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    const updatedVolunteering = await VolunteeringModel.findByIdAndUpdate(req.params.volunteeringId, value, { new: true }); 
+
+    const userSessionId = req.session.user.id;
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const updatedVolunteering = await VolunteeringModel.findByIdAndUpdate(req.params.id, value, { new: true });
     if (!updatedVolunteering) {
       return res.status(404).send("Volunteering not found");
     }
 
-    return res.status(200).json({ volunteering: updatedVolunteering }); 
+    return res.status(200).json({ volunteering: updatedVolunteering });
   } catch (error) {
     return res.status(500).send("Server error");
   }
@@ -76,18 +83,20 @@ export const updateUserVolunteering = async (req, res) => {
 // Delete a user volunteering
 export const deleteUserVolunteering = async (req, res) => {
   try {
-    const deletedVolunteering = await VolunteeringModel.findByIdAndDelete(req.params.volunteeringId);
+    const userSessionId = req.session.user.id;
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
 
+    const deletedVolunteering = await VolunteeringModel.findByIdAndDelete(req.params.volunteeringId);
     if (!deletedVolunteering) {
       return res.status(404).send('Volunteering not found');
     }
+    
+    user.volunteering.pull(req.params.id)
+    await user.save();
 
-    // Remove volunteering reference from user
-    const user = await UserModel.findById(deletedVolunteering.user);
-    if (user) {
-      user.volunteerings = user.volunteerings.filter(volunteeringId => volunteeringId.toString() !== req.params.volunteeringId); 
-      await user.save();
-    }
 
     res.status(200).json({ volunteering: deletedVolunteering });
   } catch (error) {

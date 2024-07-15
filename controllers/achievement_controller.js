@@ -6,7 +6,11 @@ import { UserModel } from "../models/user_model.js";
 // Creating Achievements Portfolio
 export const addUserAchievement = async (req, res) => {
   try {
-    const { error, value } = achievementSchema.validate(req.body);
+    const { error, value } = achievementSchema.validate({  
+      ...req.body,
+      award: req.files.award[0].filename,
+        image: req.files.image[0].filename,});
+
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
@@ -58,10 +62,22 @@ export const getOneUserAchievement = async (req, res) => {
 // Update a user achievement
 export const updateUserAchievement = async (req, res) => {
   try {
-    const { error, value } = achievementSchema.validate(req.body);
+    const { error, value } = achievementSchema.validate9({
+      ...req.body,
+      award: req.files.award[0].filename,
+        image: req.files.image[0].filename,
+    })
+
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
+
+    const userSessionId = req.session.user.id; 
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
     const updatedAchievement = await AchievementModel.findByIdAndUpdate(req.params.achievementId, value, { new: true }); 
     if (!updatedAchievement) {
       return res.status(404).send("Achievement not found");
@@ -76,20 +92,21 @@ export const updateUserAchievement = async (req, res) => {
 // Delete a user achievement
 export const deleteUserAchievement = async (req, res) => {
   try {
-    const deletedAchievement = await AchievementModel.findByIdAndDelete(req.params.achievementId);
+    const userSessionId = req.session.user.id; 
+    const user = await UserModel.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
 
+    const deletedAchievement = await AchievementModel.findByIdAndDelete(req.params.id);
     if (!deletedAchievement) {
       return res.status(404).send('Achievement not found');
     }
 
-    // Remove achievement reference from user
-    const user = await UserModel.findById(deletedAchievement.user);
-    if (user) {
-      user.achievements = user.achievements.filter(achievementId => achievementId.toString() !== req.params.achievementId); // Changed to 'achievements' array
+    user.achievements.pull(req.params.id)
       await user.save();
-    }
 
-    res.status(200).json({ achievement: deletedAchievement });
+    res.status(200).json("Achievement deleted");
   } catch (error) {
     res.status(500).send('Server error');
   }

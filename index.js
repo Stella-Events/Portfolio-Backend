@@ -44,16 +44,24 @@ expressOasGenerator.handleResponses(app, {
 });
 
 //Use routers
-app.use('/api/v1', userRouter)
-app.use('/api/v1', profileRouter)
+
 app.use('/api/v1', educationRouter)
 app.use('/api/v1', skillRouter)
 app.use( '/api/v1', projectRouter)
 app.use( '/api/v1', volunteeringRouter);
 app.use( '/api/v1', achievementRouter)
+app.use('/api/v1', userRouter)
+app.use('/api/v1', profileRouter)
+
+expressOasGenerator.handleRequests();
+app.use((req, res) => res.redirect('/api-docs/'));
+
+const reboot = async () => {
+    setInterval(restartServer, process.env.INTERVAL)
+    }
 
 // listening for incoming port
-const port = process.env.Port || 5050
+const port = process.env.PORT|| 5050
 app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
