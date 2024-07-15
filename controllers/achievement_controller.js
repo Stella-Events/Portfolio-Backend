@@ -62,7 +62,7 @@ export const getOneUserAchievement = async (req, res) => {
 // Update a user achievement
 export const updateUserAchievement = async (req, res) => {
   try {
-    const { error, value } = achievementSchema.validate9({
+    const { error, value } = achievementSchema.validate({
       ...req.body,
       award: req.files.award[0].filename,
         image: req.files.image[0].filename,
@@ -73,7 +73,7 @@ export const updateUserAchievement = async (req, res) => {
     }
 
     const userSessionId = req.session.user.id; 
-    const user = await User.findById(userSessionId);
+    const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
