@@ -1,5 +1,4 @@
 import { ExperienceModel } from "../models/experience.js";
-import { UserProfileModel } from "../models/user_Profile.js";
 import { experienceSchema } from "../schema/user_experience.js";
 import { UserModel } from "../models/user_model.js";
 
@@ -90,7 +89,8 @@ export const createUserExperience = async (req, res) => {
   
         user.experiences.pull(req.params.id);
         await user.save();
-      res.status(200).json("Experience deleted");
+
+      res.status(200).json("Experience deleted successfully");
     } catch (error) {
       return res.status(500).json({error})
     }

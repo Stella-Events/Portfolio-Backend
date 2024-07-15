@@ -19,7 +19,7 @@ export const addUserVolunteering = async (req, res) => {
     }
 
     const volunteering = await VolunteeringModel.create({ ...value, user: userSessionId });
-    user.volunteering.push(volunteering._id);
+    user.volunteering.push(volunteering.id);
     await user.save();
 
     res.status(201).json({ volunteering });
@@ -45,7 +45,7 @@ export const getAllUserVolunteerings = async (req, res) => {
 // Get one user volunteering
 export const getOneUserVolunteering = async (req, res) => {
   try {
-    const volunteering = await VolunteeringModel.findById(req.params.volunteeringId);
+    const volunteering = await VolunteeringModel.findById(req.params.id);
     if (!volunteering) {
       return res.status(404).send('Volunteering not found');
     }
@@ -89,7 +89,7 @@ export const deleteUserVolunteering = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    const deletedVolunteering = await VolunteeringModel.findByIdAndDelete(req.params.volunteeringId);
+    const deletedVolunteering = await VolunteeringModel.findByIdAndDelete(req.params.id);
     if (!deletedVolunteering) {
       return res.status(404).send('Volunteering not found');
     }
@@ -98,7 +98,7 @@ export const deleteUserVolunteering = async (req, res) => {
     await user.save();
 
 
-    res.status(200).json({ volunteering: deletedVolunteering });
+    res.status(200).json("Volunteering deleted successfully");
   } catch (error) {
     res.status(500).send('Server error');
   }
