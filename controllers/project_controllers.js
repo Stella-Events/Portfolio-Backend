@@ -19,7 +19,7 @@ export const addUserProject = async (req, res) => {
     }
 
     const project = await ProjectModel.create({ ...value, user: userSessionId });
-    user.projects.push(project._id); 
+    user.projects.push(project.id); 
     await user.save();
 
     res.status(201).json({ project });
@@ -46,7 +46,7 @@ export const getAllUserProjects = async (req, res) => {
 // Get one user project
 export const getOneUserProject = async (req, res) => {
   try {
-    const project = await ProjectModel.findById(req.params.projectId); 
+    const project = await ProjectModel.findById(req.params.id); 
     if (!project) {
       return res.status(404).send('Project not found');
     }
@@ -70,7 +70,7 @@ export const updateUserProject = async (req, res) => {
         return res.status(404).send("User not found");
       }
   
-    const updatedProject = await ProjectModel.findByIdAndUpdate(req.params.projectId, value, { new: true }); 
+    const updatedProject = await ProjectModel.findByIdAndUpdate(req.params.id, value, { new: true }); 
     if (!updatedProject) {
       return res.status(404).send("Project not found");
     }
@@ -97,8 +97,10 @@ export const deleteUserProject = async (req, res) => {
       return res.status(404).send('Project not found');
     }
 
+    user.achievements.pull(req.params.id)
+    await user.save();
 
-    res.status(200).json({ project: deletedProject });
+    res.status(200).json('Project deleted successfully');
   } catch (error) {
     res.status(500).send('Server error');
   }

@@ -18,7 +18,7 @@ export const addUserSkill = async (req, res) => {
     }
 
     const skill = await SkillModel.create({ ...value, user: userSessionId });
-    user.skills.push(skill._id); // Fixed to use 'skills' array
+    user.skills.push(skill.id); 
     await user.save();
 
     res.status(201).json({ skill });
@@ -44,7 +44,7 @@ export const getAllUserSkills = async (req, res) => {
 // Get one user skill
 export const getOneUserSkill = async (req, res) => {
   try {
-    const skill = await SkillModel.findById(req.params.skillId); 
+    const skill = await SkillModel.findById(req.params.id); 
     if (!skill) {
       return res.status(404).send('Skill not found');
     }
@@ -96,7 +96,7 @@ export const deleteUserSkill = async (req, res) => {
 
       user.skills.pull(req.params.id);
       await user.save();
-    res.status(200).json("Skill deleted");
+    res.status(200).json("Skill deleted successfully");
   } catch (error) {
     return res.status(500).json({error})
   }
