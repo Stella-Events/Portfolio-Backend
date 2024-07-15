@@ -71,24 +71,73 @@ export const logout = async(req, res, next) => {
      //Destroy user session
      await req.session.destroy();
      //Return response
-     res.status(200).json('Logout succesfully')
+     res.status(200).json('User logged out')
   } catch (error) {
      next(error)
   }
   }
 
-  export const getUser = async(req, res) => {
+  export const getUser = async(req, res, next) => {
+   try {
+    //get user based on the username
+     const username = req.params.username.toLowercase();
+    
+     //use populate to populate the fields
+     //use the select to exclude the password
+     
+     const options = { sort: { startDate: -1 } }
+     const userDetails = await UserModel.findOne({ username }).select("-password")
+     .populate({
+       path: "education",
+       options,
+     })
+ 
+     .populate("userProfile")
+    .populate("skills")
 
-    const username = req.params.username
-    //get user based on the user id
-    //use the select to exclude the password
-    //use populate to populate the education
-
-    const userDetails = await UserModel.find({username})
-    .select({password: false})
-    .populate('userProfile')
-    .populate('education')
-
-
-    return res.status(201).json({user: userDetails})
+     .populate({
+       path: "experiences",
+       options,
+     })
+ 
+     .populate({
+       path: "projects",
+       options,
+     })
+ 
+     .populate({
+       path: "volunteering",
+       options,
+     })
+    
+ 
+     .populate({
+       path: "achievements",
+       options: {sort: {}},
+     })
+    
+     return res.status(201).json({user: userDetails})
+   
+    } catch (error) {
+    next()
+   }
   }
+
+  export const getUsers = async (req, res) => {
+ 
+
+    const email = req.query.email?.toLowerCase()
+    const username = req.query.username?.toLowerCase();
+  
+    const filter = {};
+    if (email) {
+      filter.email = email;
+    }
+    if (username) {
+      filter.username = username;
+    }
+  
+    const users = await UserModel.find(filter);
+  
+    return res.status(200).json({ users });
+  };

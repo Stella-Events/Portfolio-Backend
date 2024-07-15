@@ -12,6 +12,7 @@ import { skillRouter } from "./routes/skills_routes.js";
 import { projectRouter } from "./routes/project_routes.js";
 import { volunteeringRouter } from "./routes/volunteering_routes.js";
 import { achievementRouter } from "./routes/achievement_routes.js";
+import experienceRouter from "./routes/experience_routes.js";
 
 
 // Call database
@@ -51,6 +52,8 @@ app.use('/api/v1', skillRouter)
 app.use( '/api/v1', projectRouter)
 app.use( '/api/v1', volunteeringRouter);
 app.use( '/api/v1', achievementRouter)
+app.use( '/api/v1', experienceRouter);
+
 
 // listening for incoming port
 const port = process.env.Port || 5050
