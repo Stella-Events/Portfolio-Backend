@@ -46,14 +46,15 @@ export const addUserProfile = async (req, res, next) => {
   }
 }
 
+//Get all user
 export const getAllProfile = async (req, res, next) => {
 
   //Fetching a profile belonging to a user
   try {
     const userSessionId = req.session.user.id
     const allProfile = await UserProfileModel.find({ user: userSessionId });
-    if (allProfile.length == 0) {
-      return res.status(404).send('No userProfile added')
+    if (!allProfile) {
+      return res.status(404).send('No profile added')
     }
 
     //Response
@@ -64,6 +65,7 @@ export const getAllProfile = async (req, res, next) => {
 
 }
 
+//Update User
 export const patchProfile = async (req, res,) => {
   //Request
   try {
