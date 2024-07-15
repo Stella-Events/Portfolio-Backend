@@ -84,7 +84,7 @@ export const updateUserVolunteering = async (req, res) => {
 export const deleteUserVolunteering = async (req, res) => {
   try {
     const userSessionId = req.session.user.id;
-    const user = await User.findById(userSessionId);
+    const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -93,7 +93,7 @@ export const deleteUserVolunteering = async (req, res) => {
     if (!deletedVolunteering) {
       return res.status(404).send('Volunteering not found');
     }
-    
+
     user.volunteering.pull(req.params.id)
     await user.save();
 
