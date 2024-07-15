@@ -9,7 +9,8 @@ export const addUserProfile = async (req, res, next) => {
     //Error handling
     const { error, value } = userProfileSchema.validate({
       ...req.body,
-      profilePicture: req.file.filename
+      profilePicture: req.files.profilePicture[0].filename,
+      resume: req.files.resume[0].filename,
     });
 
     if (error) {
@@ -66,15 +67,30 @@ export const getAllProfile = async (req, res, next) => {
 export const patchProfile = async (req, res,) => {
   //Request
   try {
-    const editUserProfile = await UserProfileModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.body,
-        profilePicture: req?.file?.filename
-      },
-      { new: true },
-    )
-    res.status(200).json(editUserProfile)
+    const { error, value} = userProfileSchema.validate ({
+      ...req.body,
+      profilePicture: req.files.profilePicture[0].filename,
+      resume:req.files.resume[0].filename,
+    })
+    
+    if(error) {
+      return res.status(400).send(error.details[0].message);
+
+    }
+
+    const userSessionId = req.session.user.id; 
+      const user = await UserModel.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const profile = await UserProfileModel.findByIdAndUpdate(req.params.id, value, { new: true });
+        if (!profile) {
+            return res.status(404).send("Profile not found");
+        }
+  
+      res.status(201).json({ profile });
+    
   } catch (error) {
     res.status(500).json({ error: error.message})
   }
