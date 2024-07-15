@@ -80,7 +80,7 @@ export const logout = async(req, res, next) => {
   export const getUser = async(req, res, next) => {
    try {
     //get user based on the username
-     const username = req.params.username.toLowercase();
+     const username = req.params.username.toLowerCase()
     
      //use populate to populate the fields
      //use the select to exclude the password

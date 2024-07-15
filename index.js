@@ -43,7 +43,7 @@ app.get("/api/v1/health", (req, res) => {
 // Documentation
 expressOasGenerator.handleResponses(app, {
     alwaysServeDocs: true,
-    tags: ['auth','userProfile', 'skills', 'projects', 'volunteering', 'experiences', 'education', 'achievements'],
+    tags: ['auth','profile', 'skills', 'projects', 'volunteering', 'experiences', 'education', 'achievements'],
     mongooseModels: mongoose.modelNames(), 
 });
 
