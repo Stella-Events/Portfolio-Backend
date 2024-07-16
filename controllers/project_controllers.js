@@ -11,7 +11,7 @@ export const addUserProject = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id
 
     const user = await UserModel.findById(userSessionId);
     if (!user) {
@@ -31,7 +31,7 @@ export const addUserProject = async (req, res) => {
 // Get all user projects
 export const getAllUserProjects = async (req, res) => {
   try {
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id
     const allProjects = await ProjectModel.find({ user: userSessionId });
     if (allProjects.length === 0) {
       return res.status(404).send("No projects added");
@@ -43,18 +43,7 @@ export const getAllUserProjects = async (req, res) => {
   }
 };
 
-// Get one user project
-export const getOneUserProject = async (req, res) => {
-  try {
-    const project = await ProjectModel.findById(req.params.id); 
-    if (!project) {
-      return res.status(404).send('Project not found');
-    }
-    res.status(200).json({ project });
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+;
 
 // Update a user project
 export const updateUserProject = async (req, res) => {
@@ -64,7 +53,7 @@ export const updateUserProject = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id; 
+    const userSessionId = req.session?.user?.id || req?.user?.id
       const user = await UserModel.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
@@ -86,7 +75,7 @@ export const deleteUserProject = async (req, res) => {
   try {
     
 
-    const userSessionId = req.session.user.id; 
+    const userSessionId = req.session?.user?.id || req?.user?.id 
     const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");

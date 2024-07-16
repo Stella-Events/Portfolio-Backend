@@ -1,4 +1,5 @@
 import * as bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user_model.js"
 import { userSchema } from "../schema/user_validation.js"
 
@@ -32,7 +33,7 @@ export const signup = async(req, res) => {
     
 };
 
-//User login
+//User login session
 export const login = async (req, res, next) => {
     try {
         const {email, username, password} = req.body;
@@ -65,6 +66,49 @@ export const login = async (req, res, next) => {
        console.log(error)
       }
 }
+
+//User login token
+export const token = async (req, res, next) => {
+  try {
+      const {email, username, password} = req.body;
+       //Find a user using their unique identifier
+       const user = await UserModel.findOne({
+         $or:[
+           {email: email},
+           {username: username},
+         ]
+       });
+       if(!user){
+         return res.status(401).json('No user found')
+       }else{
+         
+         //Verify their password
+         const correctPassword = bcrypt.compareSync(req.body.password, user.password);//or await bcrypt.compare
+         
+         if(!correctPassword) {
+            res.status(401).json('Invalid credentials');
+         }else{
+            //Generate a token
+            const token = jwt.sign (
+              {id: user.id}, 
+              process.env.JWT_PRIVATE_KEY,
+              {expiresIn: '3h'},
+            );
+            
+            // console.log('user', req.session.user)
+            //Return response
+            res.status(200).json({
+              message: 'User logged in',
+              accessToken: token
+            });
+           
+         }
+       }   
+    } catch (error) {
+     console.log(error)
+    }
+}
+
 
 export const logout = async(req, res, next) => {
   try {
