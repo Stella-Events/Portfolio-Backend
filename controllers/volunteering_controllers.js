@@ -64,7 +64,7 @@ export const updateUserVolunteering = async (req, res) => {
     }
 
     const userSessionId = req.session.user.id;
-    const user = await User.findById(userSessionId);
+    const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }

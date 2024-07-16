@@ -96,7 +96,7 @@ export const patchEducation = async (req, res) => {
             return res.status(404).send("Education not found");
         }
   
-        user.EducationModel.pull(req.params.id);
+        user.education.pull(req.params.id);
         await user.save();
       res.status(200).json("Education deleted");
     } catch (error) {

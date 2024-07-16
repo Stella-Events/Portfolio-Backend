@@ -8,7 +8,9 @@ const projectSchema = new Schema({
     skills: { type: String },
     links: { type: String },
     nameOfInstitution: { type: String },
-    user: { type: Types.ObjectId, ref:'User'},
+    user: { type: Types.ObjectId, ref:'User', select:false},
+},{
+    timestamps:true
 })
 
 projectSchema.plugin(toJSON)

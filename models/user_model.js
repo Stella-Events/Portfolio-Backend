@@ -18,6 +18,8 @@ const userSchema = new Schema({
     volunteering: [{ type: Types.ObjectId, ref: 'Volunteering' }],
     experiences: [{ type: Types.ObjectId, ref: 'Experience' }],
  
+},{
+    timestamps:true
 });
 userSchema.plugin(toJSON)
 export const UserModel = model("User", userSchema);
