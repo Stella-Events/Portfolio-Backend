@@ -7,7 +7,9 @@ const skillSchema = new Schema({
       type: String,
       enum: ["beginner", "intermidiate", "advanced", "expert"],
     },
-    user: { type: Types.ObjectId, ref:'User'},
+    user: { type: Types.ObjectId, ref:'User', select:false},
+},{
+  timestamps:true
 })
 
 skillSchema.plugin(toJSON)

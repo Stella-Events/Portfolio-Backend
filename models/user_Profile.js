@@ -18,7 +18,9 @@ const userProfileSchema = new Schema({
     githubLink: { type: String },
     linkedInLink: { type: String },
     twitterLink: { type: String },
-    user: { type: Types.ObjectId, ref:'User'},
+    user: { type: Types.ObjectId, ref:'User', select:false},
+},{
+  timestamps: true
 })
 
 userProfileSchema.plugin(toJSON)

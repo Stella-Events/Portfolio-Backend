@@ -8,7 +8,9 @@ const achievementSchema = new Schema({
       date: { type: String },
       nameOfInstitution: { type: String },
       user: { type: Types.ObjectId, ref:'User', select: false},
-})
+},{
+  timestamps: true
+});
 
 achievementSchema.plugin(toJSON)
 export const AchievementModel = model('Achievement', achievementSchema)

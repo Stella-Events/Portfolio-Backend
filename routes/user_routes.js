@@ -8,7 +8,7 @@ const userRouter = Router();
 
 userRouter.post('/users/auth/signup', signup);
 
-userRouter.post('/users/auth/login', checkUserSession, login);
+userRouter.post('/users/auth/login',  login);
 
 userRouter.post ('/users/auth/logout', checkUserSession, logout);
 

@@ -15,6 +15,6 @@ educationRouter.get('/users/education', checkUserSession, getAllUserEducaton);
 
 educationRouter.patch('/users/education/:id', checkUserSession, patchEducation);
 
-educationRouter.delete('/users/education', checkUserSession, deleteUserEducation);
+educationRouter.delete('/users/education/:id', checkUserSession, deleteUserEducation);
 
 export default educationRouter
