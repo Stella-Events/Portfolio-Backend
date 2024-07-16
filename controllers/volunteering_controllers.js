@@ -11,7 +11,7 @@ export const addUserVolunteering = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id;
 
     const user = await UserModel.findById(userSessionId);
     if (!user) {
@@ -31,7 +31,7 @@ export const addUserVolunteering = async (req, res) => {
 // Get all user volunteerings
 export const getAllUserVolunteerings = async (req, res) => {
   try {
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const allVolunteerings = await VolunteeringModel.find({ user: userSessionId });
     if (allVolunteerings.length === 0) {
       return res.status(404).send("No volunteerings added");
@@ -42,18 +42,7 @@ export const getAllUserVolunteerings = async (req, res) => {
   }
 };
 
-// Get one user volunteering
-export const getOneUserVolunteering = async (req, res) => {
-  try {
-    const volunteering = await VolunteeringModel.findById(req.params.id);
-    if (!volunteering) {
-      return res.status(404).send('Volunteering not found');
-    }
-    res.status(200).json({ volunteering });
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+
 
 // Update a user volunteering
 export const updateUserVolunteering = async (req, res) => {
@@ -63,7 +52,7 @@ export const updateUserVolunteering = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
@@ -83,7 +72,7 @@ export const updateUserVolunteering = async (req, res) => {
 // Delete a user volunteering
 export const deleteUserVolunteering = async (req, res) => {
   try {
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");

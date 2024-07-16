@@ -21,9 +21,9 @@ export const addUserProfile = async (req, res, next) => {
     //find the user
     console.log('userId', req.session.user.id)
 
-    const userSessionId = req.session.user.id
+    const userSessionId = req.session?.user?.id || req?.user?.id
 
-    const user = await UserModel.findById(req.session.user.id)
+    const user = await UserModel.findById(userSessionId)
     if (!user) {
       return res.status(404).send('User not found')
     }
@@ -51,7 +51,7 @@ export const getAllProfile = async (req, res, next) => {
 
   //Fetching a profile belonging to a user
   try {
-    const userSessionId = req.session.user.id
+    const userSessionId = req.session?.user?.id || req?.user?.id
     const allProfile = await UserProfileModel.find({ user: userSessionId });
     if (!allProfile) {
       return res.status(404).send('No profile added')
@@ -80,7 +80,7 @@ export const patchProfile = async (req, res,) => {
 
     }
 
-    const userSessionId = req.session.user.id; 
+    const userSessionId = req.session?.user?.id || req?.user?.id
       const user = await UserModel.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
