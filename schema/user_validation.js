@@ -6,12 +6,12 @@ import joi from "joi";
         otherNames: joi.string(),
         email: joi.string().email().required(),
         password: joi.string().min(4).required(),
-        confirmedPassword: joi.ref('password'),
+        confirmPassword: joi.ref('password'),
         username: joi.string().required(),
         termsAndConditions: joi.boolean(),
         
     
-}) .with('password', 'confirmedPassword')
+}) .with('password', 'confirmPassword')
 
 export const userProfileSchema = joi.object({
         profilePicture: joi.string(), 
