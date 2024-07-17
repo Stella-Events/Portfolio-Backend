@@ -6,5 +6,6 @@ export const projectSchema = joi.object({
     contributors: joi.string(),
     skills: joi.string(),
     links: joi.string(),
+    image: joi.string(),
     nameOfInstitution: joi.string(),
 })

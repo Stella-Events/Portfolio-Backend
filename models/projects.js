@@ -7,6 +7,7 @@ const projectSchema = new Schema({
     contributors: { type: String },
     skills: { type: String },
     links: { type: String },
+    image: {type: String},
     nameOfInstitution: { type: String },
     user: { type: Types.ObjectId, ref:'User', select:false},
 },{

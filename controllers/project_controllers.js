@@ -6,7 +6,10 @@ import { UserModel } from "../models/user_model.js";
 // Creating Projects Portfolio
 export const addUserProject = async (req, res) => {
   try {
-    const { error, value } = projectSchema.validate(req.body);
+    const { error, value } = projectSchema.validate({
+      ...req.body,
+      image: req.file.filename,
+    });
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
@@ -48,7 +51,10 @@ export const getAllUserProjects = async (req, res) => {
 // Update a user project
 export const updateUserProject = async (req, res) => {
   try {
-    const { error, value } = projectSchema.validate(req.body);
+    const { error, value } = projectSchema.validate({
+      ...req.body,
+      image: req.file.filename,
+    });
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
