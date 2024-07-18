@@ -6,30 +6,34 @@ import { userSchema } from "../schema/user_validation.js"
 //User Signup
 export const signup = async(req, res) => {
     
-  const {error, value} = userSchema.validate(req.body)
-    if(error){
-        return res.status(400).send(error.details[0].message)
-    }
-    //Check if user exits
-    const email = value.email
-    console.log('email', email)
-
-    const findIfUserExist = await UserModel.findOne({email})
-    if(findIfUserExist){
-        return res.status(401).send('User already exists')
-    }else{
-      const hashedPassword = await bcrypt.hash(value.password, 12)
-    value.password = hashedPassword
-    console.log('val', value)
-  //  const addUser = await UserModel.create(value)
-  //  return res.status(201).send(addUser)
-        
-   const addUser = await UserModel.create(value)
-
-   req.session.user = { id: addUser.id }
-
-   return res.status(201).send('User created successfully')  
-    }
+  try {
+    const {error, value} = userSchema.validate(req.body)
+      if(error){
+          return res.status(400).send(error.details[0].message)
+      }
+      //Check if user exits
+      const email = value.email
+      console.log('email', email)
+  
+      const findIfUserExist = await UserModel.findOne({email})
+      if(findIfUserExist){
+          return res.status(401).send('User already exists')
+      }else{
+        const hashedPassword = await bcrypt.hash(value.password, 12)
+      value.password = hashedPassword
+      console.log('val', value)
+    //  const addUser = await UserModel.create(value)
+    //  return res.status(201).send(addUser)
+          
+     const addUser = await UserModel.create(value)
+  
+     req.session.user = { id: addUser.id }
+  
+     return res.status(201).send('User created successfully')  
+      }
+  } catch (error) {
+     next(error)
+  }
     
 };
 
@@ -63,7 +67,7 @@ export const login = async (req, res, next) => {
            }
          }   
       } catch (error) {
-       console.log(error)
+       next(error)
       }
 }
 
@@ -105,7 +109,7 @@ export const token = async (req, res, next) => {
          }
        }   
     } catch (error) {
-     console.log(error)
+     next(error)
     }
 }
 
@@ -163,7 +167,7 @@ export const logout = async(req, res, next) => {
      return res.status(201).json({user: userDetails})
    
     } catch (error) {
-    next()
+    next(error)
    }
   }
 
