@@ -100,4 +100,24 @@ export const deleteUserAchievement = async (req, res) => {
   }
 };
 
+//Getting one userid
 
+export const getAchievementById = async(req, res) =>{
+try {
+  
+    const userSessionId = req.session?.user?.id || req?.user?.id;
+      const user = await UserModel.findById(userSessionId)
+     
+      // //Check if user exits
+       if (!user) {
+         return res.status(404).send("User not found");
+       }
+  
+      //Get achievement by id
+      const achievementId = await AchievementModel.findById(req.params.id);
+      //Return response
+      res.status(200).json(achievementId)
+} catch (error) {
+  return res.status(200).json(error.message)
+}
+} 
