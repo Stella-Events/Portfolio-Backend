@@ -96,3 +96,25 @@ export const createUserExperience = async (req, res) => {
       return res.status(500).json({error})
     }
   };
+
+  //Getting one userid
+
+export const getExperienceById = async(req, res) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get experience by id
+        const experienceId = await ExperienceModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(experienceId)
+  } catch (error) {
+    return res.status(200).json(error.message)
+  }
+  } 

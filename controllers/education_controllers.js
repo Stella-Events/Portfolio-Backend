@@ -11,7 +11,6 @@ export const addEducation = async (req, res) => {
         }
 
         // find the user with the id to check whether it exits
-        console.log('userId', req.session.user.id)
         
         const userSessionId = req.session?.user?.id || req?.user?.id
         
@@ -103,3 +102,26 @@ export const patchEducation = async (req, res) => {
       return res.status(500).json({error})
     }
   };
+
+  //Getting one userid
+
+export const getEducationById = async(req, res) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get education by id
+        const educationId = await EducationModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(educationId)
+  } catch (error) {
+    return res.status(500).json(error.message)
+  }
+  } 
+  

@@ -92,3 +92,24 @@ export const deleteUserVolunteering = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+//Getting By Id
+export const getVolunteeringById = async(req, res, next) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get skill by id
+        const volunteeringId = await VolunteeringModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(volunteeringId)
+  } catch (error) {
+    next(error)
+  }
+  } 

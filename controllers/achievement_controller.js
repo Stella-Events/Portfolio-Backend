@@ -102,7 +102,7 @@ export const deleteUserAchievement = async (req, res) => {
 
 //Getting one userid
 
-export const getAchievementById = async(req, res) =>{
+export const getAchievementById = async(req, res, next) =>{
 try {
   
     const userSessionId = req.session?.user?.id || req?.user?.id;
@@ -118,6 +118,6 @@ try {
       //Return response
       res.status(200).json(achievementId)
 } catch (error) {
-  return res.status(200).json(error.message)
+  next(error)
 }
 } 

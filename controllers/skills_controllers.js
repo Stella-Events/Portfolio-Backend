@@ -89,3 +89,25 @@ export const deleteUserSkill = async (req, res) => {
     return res.status(500).json({error})
   }
 };
+
+//Getting one userid
+
+export const getSkillsById = async(req, res, next) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get skill by id
+        const skillsId = await SkillModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(skillsId)
+  } catch (error) {
+    next(error)
+  }
+  } 
