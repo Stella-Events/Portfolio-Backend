@@ -21,7 +21,7 @@ export const addUserSkill = async (req, res) => {
     user.skills.push(skill.id); 
     await user.save();
 
-    res.status(201).json({message: 'Project added successfully', skill });
+    res.status(201).json({message: 'Skill added successfully', skill });
   } catch (error) {
     return res.status(500).send("Server error");
   }
@@ -32,9 +32,9 @@ export const getAllUserSkills = async (req, res) => {
   try {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allSkills = await SkillModel.find({ user: userSessionId });
-    if (allSkills.length === 0) {
-      return res.status(404).send({ skills: allSkills });
-    }
+    // if (allSkills.length === 0) {
+    //   return res.status(404).send({ skills: allSkills });
+    // }
     res.status(200).json({ skills: allSkills });
   } catch (error) {
     return res.status(500).send("Server error");
