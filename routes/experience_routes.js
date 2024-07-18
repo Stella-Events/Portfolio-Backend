@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { checkUserSession } from "../middlewares/auth.js";
-import { createUserExperience, deleteUserExperience, getAllUserExperience, updateUserExperience } from "../controllers/experience_controller.js";
+import { createUserExperience, deleteUserExperience, getAllUserExperience, getExperienceById, updateUserExperience } from "../controllers/experience_controller.js";
 //Router
 const experienceRouter = Router();
 
 //Routes
-experienceRouter.get('/users/experiences')
+experienceRouter.get('/users/experiences/:id',checkUserSession, getExperienceById)
 
 experienceRouter.post('/users/experiences',checkUserSession, createUserExperience)
 

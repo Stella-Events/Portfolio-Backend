@@ -16,10 +16,9 @@ export const addUserProfile = async (req, res, next) => {
     if (error) {
       return res.status(400).send(error.details[0].message)
     }
-    console.log(value, 'value')
+    
 
     //find the user
-    console.log('userId', req.session.user.id)
 
     const userSessionId = req.session?.user?.id || req?.user?.id
 
@@ -97,3 +96,24 @@ export const patchProfile = async (req, res,) => {
     res.status(500).json({ error: error.message})
   }
 }
+
+//Getting By Id
+export const getProfileById = async(req, res, next) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get skill by id
+        const profileId = await UserProfileModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(profileId)
+  } catch (error) {
+    next(error)
+  }
+  } 

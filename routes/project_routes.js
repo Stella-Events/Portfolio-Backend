@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addUserProject, deleteUserProject, getAllUserProjects, updateUserProject } from "../controllers/project_controllers.js";
+import { addUserProject, deleteUserProject, getAllUserProjects, getProjectById, updateUserProject } from "../controllers/project_controllers.js";
 import { checkUserSession } from "../middlewares/auth.js";
 import { remoteUpload } from "../middlewares/uploads.js";
 
@@ -9,6 +9,9 @@ projectRouter.post('/users/projects',checkUserSession, remoteUpload.single('imag
 
 projectRouter.get('/users/projects',checkUserSession , getAllUserProjects);
 
+projectRouter.get('/users/projects/:id', checkUserSession, getProjectById);
+
 projectRouter.patch('/users/projects/:id',checkUserSession, remoteUpload.single('image'), updateUserProject );
 
 projectRouter.delete('/users/projects/:id',checkUserSession, deleteUserProject);
+

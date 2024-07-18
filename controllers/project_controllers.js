@@ -100,3 +100,25 @@ export const deleteUserProject = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+ //Getting one userid
+
+ export const getProjectById = async(req, res, next) =>{
+  try {
+    
+      const userSessionId = req.session?.user?.id || req?.user?.id;
+        const user = await UserModel.findById(userSessionId)
+       
+        // //Check if user exits
+         if (!user) {
+           return res.status(404).send("User not found");
+         }
+    
+        //Get project by id
+        const projectId = await ProjectModel.findById(req.params.id);
+        //Return response
+        res.status(200).json(projectId)
+  } catch (error) {
+    next(error)
+  }
+  } 
