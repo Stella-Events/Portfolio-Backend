@@ -33,7 +33,7 @@ export const getAllUserSkills = async (req, res) => {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allSkills = await SkillModel.find({ user: userSessionId });
     if (allSkills.length === 0) {
-      return res.status(404).send("No skills added");
+      return res.status(404).send({ skills: allSkills });
     }
     res.status(200).json({ skills: allSkills });
   } catch (error) {
@@ -58,7 +58,7 @@ export const updateUserSkill = async (req, res) => {
 
     const updatedSkill = await SkillModel.findByIdAndUpdate(req.params.id, value, { new: true }); 
     if (!updatedSkill) {
-      return res.status(404).send("Skill not found");
+      return res.status(404).send({ skill: updatedSkill });
     }
 
     return res.status(200).json({ skill: updatedSkill }); 
