@@ -36,9 +36,9 @@ export const getAllUserAchievements = async (req, res) => {
   try {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allAchievements = await AchievementModel.find({ user: userSessionId });
-    if (allAchievements.length === 0) {
-      return res.status(404).send({ achievements: allAchievements });
-    }
+    // if (allAchievements.length === 0) {
+    //   return res.status(404).send({ achievements: allAchievements });
+    // }
     res.status(200).json({ achievements: allAchievements });
   } catch (error) {
     return res.status(500).send("Server error");

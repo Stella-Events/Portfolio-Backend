@@ -38,10 +38,10 @@ export const createUserExperience = async (req, res) => {
       //we are fetching Experience that belongs to a particular user
       const userSessionId = req.session?.user?.id || req?.user?.id;
 
-      const allExperience = await ExperienceModel.find({ user: userSessionId });
-      if (allExperience.length == 0) {
-        return res.status(404).send({ Experience: allExperience });
-      }
+      // const allExperience = await ExperienceModel.find({ user: userSessionId });
+      // if (allExperience.length == 0) {
+      //   return res.status(404).send({ Experience: allExperience });
+      // }
       res.status(200).json({ Experience: allExperience });
     } catch (error) {
       return res.status(500).json({error})

@@ -33,9 +33,9 @@ export const getAllUserVolunteerings = async (req, res) => {
   try {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allVolunteerings = await VolunteeringModel.find({ user: userSessionId });
-    if (allVolunteerings.length === 0) {
-      return res.status(404).send({ volunteerings: allVolunteerings });
-    }
+    // if (allVolunteerings.length === 0) {
+    //   return res.status(404).send({ volunteerings: allVolunteerings });
+    // }
     res.status(200).json({ volunteerings: allVolunteerings });
   } catch (error) {
     return res.status(500).send("Server error");

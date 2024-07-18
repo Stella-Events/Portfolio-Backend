@@ -32,9 +32,9 @@ export const getAllUserSkills = async (req, res) => {
   try {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allSkills = await SkillModel.find({ user: userSessionId });
-    if (allSkills.length === 0) {
-      return res.status(404).send({ skills: allSkills });
-    }
+    // if (allSkills.length === 0) {
+    //   return res.status(404).send({ skills: allSkills });
+    // }
     res.status(200).json({ skills: allSkills });
   } catch (error) {
     return res.status(500).send("Server error");
