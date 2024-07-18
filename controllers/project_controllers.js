@@ -25,7 +25,7 @@ export const addUserProject = async (req, res) => {
     user.projects.push(project.id); 
     await user.save();
 
-    res.status(201).json({ project });
+    res.status(201).json({message: 'Project added successfully', project });
   } catch (error) {
     return res.status(500).send("Server error");
   }
@@ -70,7 +70,7 @@ export const updateUserProject = async (req, res) => {
       return res.status(404).send({ project: updatedProject });
     }
 
-    return res.status(200).json({ project: updatedProject }); 
+    return res.status(200).json({message: 'Project updated successfully', updatedProject }); 
   } catch (error) {
     return res.status(500).send("Server error");
   }

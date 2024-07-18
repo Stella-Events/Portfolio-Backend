@@ -21,7 +21,7 @@ export const addUserSkill = async (req, res) => {
     user.skills.push(skill.id); 
     await user.save();
 
-    res.status(201).json({ skill });
+    res.status(201).json({message: 'Project added successfully', skill });
   } catch (error) {
     return res.status(500).send("Server error");
   }
@@ -61,7 +61,7 @@ export const updateUserSkill = async (req, res) => {
       return res.status(404).send({ skill: updatedSkill });
     }
 
-    return res.status(200).json({ skill: updatedSkill }); 
+    return res.status(200).json({ message: 'Skills updated successfully', updatedSkill }); 
   } catch (error) {
     return res.status(500).send("Server error");
   }

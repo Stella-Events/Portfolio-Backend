@@ -26,7 +26,7 @@ export const createUserExperience = async (req, res) => {
   
       await user.save();
   
-      res.status(201).json({ experience });
+      res.status(201).json({message: 'Experience added successfully', experience });
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +68,7 @@ export const createUserExperience = async (req, res) => {
             return res.status(404).send({ experience });
         }
   
-      res.status(200).json({ experience });
+      res.status(200).json({message: 'Experience updated successfully', experience });
     } catch (error) {
       return res.status(500).json({error})
     }

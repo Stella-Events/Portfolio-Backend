@@ -38,7 +38,7 @@ export const addUserProfile = async (req, res, next) => {
 
 
     //Return profile response
-    res.status(201).json({ profile })
+    res.status(201).json({message: 'Profile added successfully', profile })
 
   } catch (error) {
     next(error)
@@ -90,7 +90,7 @@ export const patchProfile = async (req, res,) => {
             return res.status(404).send({ profile });
         }
   
-      res.status(201).json({ profile });
+      res.status(201).json({message: 'Profile updated successfully', profile });
     
   } catch (error) {
     res.status(500).json({ error: error.message})

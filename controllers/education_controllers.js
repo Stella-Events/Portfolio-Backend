@@ -30,7 +30,7 @@ export const addEducation = async (req, res) => {
         await user.save();
 
         //return the education
-        res.status(201).json({ education })
+        res.status(201).json({message: 'Education added succesfully' ,education })
 
     } catch (error) {
         return res.status(500).send(error)
@@ -73,7 +73,7 @@ export const patchEducation = async (req, res) => {
             return res.status(404).send({ Education });
         }
   
-      res.status(201).json({ Education });
+      res.status(201).json({message: 'Education updated successfully', Education });
     } catch (error) {
       return res.status(500).json({error})
     }
