@@ -34,7 +34,7 @@ export const getAllUserVolunteerings = async (req, res) => {
     const userSessionId = req.session?.user?.id || req?.user?.id;
     const allVolunteerings = await VolunteeringModel.find({ user: userSessionId });
     if (allVolunteerings.length === 0) {
-      return res.status(404).send("No volunteerings added");
+      return res.status(404).send({ volunteerings: allVolunteerings });
     }
     res.status(200).json({ volunteerings: allVolunteerings });
   } catch (error) {
@@ -60,7 +60,7 @@ export const updateUserVolunteering = async (req, res) => {
 
     const updatedVolunteering = await VolunteeringModel.findByIdAndUpdate(req.params.id, value, { new: true });
     if (!updatedVolunteering) {
-      return res.status(404).send("Volunteering not found");
+      return res.status(404).send({ volunteering: updatedVolunteering });
     }
 
     return res.status(200).json({ volunteering: updatedVolunteering });

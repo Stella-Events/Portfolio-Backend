@@ -53,7 +53,7 @@ export const getAllProfile = async (req, res, next) => {
     const userSessionId = req.session?.user?.id || req?.user?.id
     const allProfile = await UserProfileModel.find({ user: userSessionId });
     if (!allProfile) {
-      return res.status(404).send('No profile added')
+      return res.status(404).send({ userProfile: allProfile })
     }
 
     //Response
@@ -87,7 +87,7 @@ export const patchProfile = async (req, res,) => {
 
       const profile = await UserProfileModel.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!profile) {
-            return res.status(404).send("Profile not found");
+            return res.status(404).send({ profile });
         }
   
       res.status(201).json({ profile });

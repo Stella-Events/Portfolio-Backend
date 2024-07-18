@@ -37,7 +37,7 @@ export const getAllUserProjects = async (req, res) => {
     const userSessionId = req.session?.user?.id || req?.user?.id
     const allProjects = await ProjectModel.find({ user: userSessionId });
     if (allProjects.length === 0) {
-      return res.status(404).send("No projects added");
+      return res.status(404).send({ projects: allProjects });
     }
 
     res.status(200).json({ projects: allProjects });
@@ -67,7 +67,7 @@ export const updateUserProject = async (req, res) => {
   
     const updatedProject = await ProjectModel.findByIdAndUpdate(req.params.id, value, { new: true }); 
     if (!updatedProject) {
-      return res.status(404).send("Project not found");
+      return res.status(404).send({ project: updatedProject });
     }
 
     return res.status(200).json({ project: updatedProject }); 
