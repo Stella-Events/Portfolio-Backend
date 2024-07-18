@@ -22,7 +22,7 @@ export const addUserVolunteering = async (req, res) => {
     user.volunteering.push(volunteering.id);
     await user.save();
 
-    res.status(201).json({ volunteering });
+    res.status(201).json({message: 'Volunteering added successfully', volunteering });
   } catch (error) {
     return res.status(500).send("Server error");
   }
@@ -63,7 +63,7 @@ export const updateUserVolunteering = async (req, res) => {
       return res.status(404).send({ volunteering: updatedVolunteering });
     }
 
-    return res.status(200).json({ volunteering: updatedVolunteering });
+    return res.status(200).json({ message: 'Volunteering updated successfully', updatedVolunteering });
   } catch (error) {
     return res.status(500).send("Server error");
   }
