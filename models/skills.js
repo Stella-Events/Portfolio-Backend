@@ -5,7 +5,7 @@ const skillSchema = new Schema({
     name: { type: String },
     levelOfProficiency: {
       type: String,
-      enum: ["beginner", "intermediate", "advanced", "expert"],
+      enum: ["Beginner", "Intermediate", "Advanced", "Expert"],
     },
     user: { type: Types.ObjectId, ref:'User', select:false},
 },{
