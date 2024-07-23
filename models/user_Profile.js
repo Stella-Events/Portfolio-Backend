@@ -18,7 +18,7 @@ const userProfileSchema = new Schema({
     githubLink: { type: String },
     linkedInLink: { type: String },
     twitterLink: { type: String },
-    user: { type: Types.ObjectId, ref:'User', select:false, unique:true},
+    user: { type: Types.ObjectId, ref:'User', select:false},
 },{
   timestamps: true
 })
