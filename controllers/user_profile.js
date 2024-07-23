@@ -9,8 +9,8 @@ export const addUserProfile = async (req, res, next) => {
     //Error handling
     const { error, value } = userProfileSchema.validate({
       ...req.body,
-      profilePicture: req.files.profilePicture[0].filename,
-      resume: req.files.resume[0].filename,
+      profilePicture: req.files?.profilePicture[0].filename,
+      resume: req.files?.resume[0].filename,
     });
 
     if (error) {
@@ -38,26 +38,29 @@ export const addUserProfile = async (req, res, next) => {
 
 
     //Return profile response
-    res.status(201).json({message: 'Profile added successfully', profile })
+    res.status(201).json({ profile })
 
   } catch (error) {
     next(error)
   }
 }
 
-//Get all user
-export const getAllProfile = async (req, res, next) => {
+//Get  user profile
+export const getUserProfile = async (req, res, next) => {
 
   //Fetching a profile belonging to a user
   try {
     const userSessionId = req.session?.user?.id || req?.user?.id
-    const allProfile = await UserProfileModel.find({ user: userSessionId });
-    if (!allProfile) {
-      return res.status(404).send({ userProfile: allProfile })
+    const profile = await UserProfileModel.findOne({ user: userSessionId }).populate({
+      path: 'user',
+      select: '-password'
+    });
+    if (!profile) {
+      return res.status(200).send({profile})
     }
 
     //Response
-    res.status(200).json({ userProfile: allProfile });
+    res.status(200).json({profile });
   } catch (error) {
     next(error)
   }
@@ -87,33 +90,33 @@ export const patchProfile = async (req, res,) => {
 
       const profile = await UserProfileModel.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!profile) {
-            return res.status(404).send({ profile });
+            return res.status(404).send("Profile not found");
         }
   
-      res.status(201).json({message: 'Profile updated successfully', profile });
+      res.status(201).json({ profile });
     
   } catch (error) {
     res.status(500).json({ error: error.message})
   }
 }
 
-//Getting By Id
-export const getProfileById = async(req, res, next) =>{
-  try {
+// //Getting By Id
+// export const getProfileById = async(req, res, next) =>{
+//   try {
     
-      const userSessionId = req.session?.user?.id || req?.user?.id;
-        const user = await UserModel.findById(userSessionId)
+//       const userSessionId = req.session?.user?.id || req?.user?.id;
+//         const user = await UserModel.findById(userSessionId)
        
-        // //Check if user exits
-         if (!user) {
-           return res.status(404).send("User not found");
-         }
+//         // //Check if user exits
+//          if (!user) {
+//            return res.status(404).send("User not found");
+//          }
     
-        //Get skill by id
-        const profileId = await UserProfileModel.findById(req.params.id);
-        //Return response
-        res.status(200).json(profileId)
-  } catch (error) {
-    next(error)
-  }
-  } 
+//         //Get skill by id
+//         const profileId = await UserProfileModel.findById(req.params.id);
+//         //Return response
+//         res.status(200).json(profileId)
+//   } catch (error) {
+//     next(error)
+//   }
+//   } 
