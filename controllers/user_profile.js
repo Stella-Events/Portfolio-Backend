@@ -41,7 +41,8 @@ export const addUserProfile = async (req, res, next) => {
     res.status(201).json({ profile })
 
   } catch (error) {
-    next(error)
+    // next(error)
+    res.status(500).json({ error: error.message})
   }
 }
 
@@ -68,14 +69,29 @@ export const getUserProfile = async (req, res, next) => {
 }
 
 //Update User
-export const patchProfile = async (req, res,) => {
+export const patchProfile = async (req, res) => {
   //Request
   try {
-    const { error, value} = userProfileSchema.validate ({
-      ...req.body,
-      profilePicture: req.files.profilePicture[0].filename,
-      resume:req.files.resume[0].filename,
-    })
+
+    const updateFields = {...req.body};
+
+    if(req.file?.profilePicture) {
+      updateFields.profilePicture = req.file.filename;
+    }else if (req.files?.profilePicture) {
+      updateFields.profilePicture = req.files.profilePicture[0].filename;
+    }
+
+    if (req.file?.resume) {
+      updateFields.resume = req.file.filename;
+    }else if (req.files.resume){
+      updateFields.resume = req.files.resume[0].filename;
+    }
+    const { error, value} = userProfileSchema.validate (updateFields)
+      // ...req.body,
+      // profilePicture: req.files?.profilePicture[0]?.filename,
+      // resume:req.files?.resume[0].filename,
+
+    
     
     if(error) {
       return res.status(400).send(error.details[0].message);
