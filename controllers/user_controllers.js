@@ -102,8 +102,14 @@ export const token = async (req, res, next) => {
             // console.log('user', req.session.user)
             //Return response
             res.status(200).json({
-              message: 'User logged in',
-              accessToken: token
+              message: 'User logged in successfully',
+              accessToken: token,
+              user: {
+                firstName:user.firstName,
+                lastName:user.lastName,
+                otherNames: user.otherNames,
+                username: user.username
+              }
             });
            
          }
