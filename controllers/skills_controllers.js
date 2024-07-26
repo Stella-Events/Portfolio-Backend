@@ -17,6 +17,15 @@ export const addUserSkill = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
+    //Extract the skill name from the request body
+    const {name} = req.body
+
+    //check if skill exits
+    const existingSkill = await SkillModel.findOne({ name: name }, {userSessionId: userSessionId }); 
+    if (existingSkill) {
+      return res.status(409).json('The skill already exits for this user')
+    }
+     //Creating new skill 
     const skill = await SkillModel.create({ ...value, user: userSessionId });
     user.skills.push(skill.id); 
     await user.save();
