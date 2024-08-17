@@ -21,7 +21,7 @@ import experienceRouter from "./routes/experience_routes.js";
 const app = express();
 
 //Applying middleware
-app.use(cors({credentials: true, origin: 'http://localhost:5173'}));
+app.use(cors({credentials: false, origin: '*'}));
 app.use(express.json());
 
 app.use(session({
